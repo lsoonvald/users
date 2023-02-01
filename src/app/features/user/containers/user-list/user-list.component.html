@@ -1,0 +1,26 @@
+<app-block title="User list">
+  <table class="user-list__table">
+    <th>Email</th>
+    <th>Name</th>
+    <th>Username</th>
+    <th>Website</th>
+    <th></th>
+    <tr *ngFor="let user of users | async" [routerLink]="['/', 'user', 'detail', user.id]">
+      <td>
+        {{ user.email }}
+      </td>
+      <td>
+        {{ user.name }}
+      </td>
+      <td>
+        {{ user.username}}
+      </td>
+      <td>
+        {{ user.website }}
+      </td>
+      <td>
+        <button class="elevated-btn" (click)="deleteUser(user.id)">Delete</button>
+      </td>
+    </tr>
+  </table>
+</app-block>

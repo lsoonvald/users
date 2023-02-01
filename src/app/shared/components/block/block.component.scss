@@ -1,0 +1,15 @@
+app-block {
+  .container {
+    &__title {
+      padding: 5px;
+      background-color: var(--main-black);
+      color: var(--main-white);
+    }
+
+    &__body {
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+    }
+  }
+}

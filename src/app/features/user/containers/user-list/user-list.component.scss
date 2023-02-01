@@ -1,0 +1,45 @@
+app-user-list {
+  .user-list {
+    &__table {
+      width: 100%;
+      border-spacing: 0;
+      border-color: unset;
+
+      .elevated-btn {
+        cursor: pointer;
+        z-index: 1000000;
+      }
+
+      th {
+        text-align: left;
+        background-color: var(--main-blue);
+        font-weight: 400;
+        font-size: 18px;
+        padding: 5px;
+        color: var(--main-white);
+      }
+
+      tr {
+        cursor: pointer;
+
+        &:nth-child(odd) {
+          background-color: var(--table-odd-row);
+        }
+
+        &:nth-child(even) {
+          background-color: var(--table-even-row);
+        }
+
+        &:hover {
+          background-color: var(--main-light-grey);
+        }
+      }
+
+      td {
+        text-align: left;
+        font-weight: 500;
+        padding: 5px;
+      }
+    }
+  }
+}

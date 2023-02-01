@@ -1,0 +1,18 @@
+app-user-detail {
+  .form-container {
+    display: flex;
+    flex-direction: column;
+
+
+  }
+
+  label {
+    margin: .5rem 0;
+    font-weight: 800;
+  }
+
+  input,
+  span {
+    margin-bottom: 1rem;
+  }
+}
