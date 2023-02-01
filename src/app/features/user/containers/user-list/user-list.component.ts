@@ -9,9 +9,11 @@ import { UserFacadeService } from '../../services/user-facade.service';
 })
 export class UserListComponent {
   users = this.facade.users;
+  searchForm = this.facade.searchForm;
 
   constructor(private facade: UserFacadeService) {
     this.facade.getUserList();
+    this.facade.createSearchForm();
   }
 
   deleteUser(id: number): void {

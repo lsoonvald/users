@@ -1,4 +1,8 @@
 <app-block title="User list">
+  <form *ngIf="searchForm | async as searchForm" [formGroup]="searchForm">
+    <label for="name">Search by name:</label>
+    <input type="text" formControlName="name">
+  </form>
   <table class="user-list__table">
     <th>Email</th>
     <th>Name</th>

@@ -1,19 +1,25 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { BehaviorSubject, take } from 'rxjs';
+import { BehaviorSubject, Subject, take, takeUntil } from 'rxjs';
 import { IUser } from '../model/user';
 import { UserApiService } from './user-api.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class UserFacadeService {
+export class UserFacadeService implements OnDestroy {
+  private fetchedUsers$ = new BehaviorSubject<IUser[]>([]);
+  fetchedUsers = this.fetchedUsers$.asObservable();
   private users$ = new BehaviorSubject<IUser[]>([]);
   users = this.users$.asObservable();
   private user$ = new BehaviorSubject<IUser | undefined>(undefined);
   user = this.user$.asObservable();
   userDetailForm$ = new BehaviorSubject<FormGroup | undefined>(undefined);
   userDetailForm = this.userDetailForm$.asObservable();
+  searchForm$ = new BehaviorSubject<FormGroup | undefined>(undefined);
+  searchForm = this.searchForm$.asObservable();
+
+  private unsubscribe$: Subject<void> = new Subject<void>();
 
   constructor(private api: UserApiService, private fb: FormBuilder) {}
 
@@ -39,6 +45,7 @@ export class UserFacadeService {
 
   setUsersValue(users: IUser[]): void {
     this.users$.next(users);
+    this.fetchedUsers$.next(users);
   }
 
   deleteUser(id: number) {
@@ -61,7 +68,6 @@ export class UserFacadeService {
       el.id === id ? user : el
     );
     this.setUsersValue(updatedUsers);
-    console.log(this.users$.value);
   }
 
   setUserDetailForm(user: IUser): void {
@@ -74,5 +80,32 @@ export class UserFacadeService {
         website: [user.website],
       })
     );
+  }
+
+  filterUsersByName(value: string): void {
+    this.users$.next(
+      this.fetchedUsers$.value.filter((user) =>
+        user.name.toLowerCase().includes(value.toLowerCase())
+      )
+    );
+  }
+
+  createSearchForm(): void {
+    this.searchForm$.next(
+      this.fb.group({
+        name: [''],
+      })
+    );
+
+    this.searchForm$.value?.controls['name'].valueChanges
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((value) => {
+        this.filterUsersByName(value);
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }
